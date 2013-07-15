@@ -7,8 +7,9 @@
 #include "./drivers/video.h"
 #include "./lib/stdio.h"
 #include "./lib/stdlib.h"
-#include "./drivers/time.h"
+#include "./lib/time.h"
 #include "shell.h"
+#include "./drivers/lspci.h"
 
 #define OS_PID	0
 
@@ -16,6 +17,8 @@ int (*player)(void);
 
 typedef enum eINT_80 {WRITE=0, READ} tINT_80;
 typedef enum eUSER {U_KERNEL=0, U_NORMAL} tUSERS;
+
+void defaultScreen(void);
 
 /* __write
 *

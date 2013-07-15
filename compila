@@ -18,9 +18,10 @@ gcc -Wall -c ../lib/string.c -o  string.o -fno-builtin
 gcc -Wall -c ../lib/stdlib.c -o  stdlib.o -fno-builtin
 gcc -Wall -c ../lib/ctype.c -o  ctype.o -fno-builtin
 gcc -Wall -c ../src/drivers/keyboard.c -o keyboard.o -fno-builtin
-gcc -Wall -c ../src/drivers/video.c -o video.o -fno-builtin
-gcc -Wall -c ../src/drivers/time.c -o time.o -fno-builtin
+gcc -Wall -c ../src/drivers/video.c -o video.o -fno-builtin -fno-stack-protector
+gcc -Wall -c ../src/drivers/lspci.c -o lspci.o -fno-builtin
+gcc -Wall -c ../lib/time.c -o time.o -fno-builtin
 echo "Listo."
 echo "Linkeditando..."
-ld -T ../src/link.ld -o kernel.bin kernel.o kstart.o libc.o libasm.o keyboard.o ints.o video.o syscalls.o stdio.o string.o buffers.o cursor.o ctype.o stdlib.o time.o shell.o
+ld -T ../src/link.ld -o kernel.bin kernel.o kstart.o libc.o libasm.o keyboard.o ints.o video.o syscalls.o stdio.o string.o buffers.o cursor.o ctype.o stdlib.o time.o shell.o lspci.o 
 echo "Listo."

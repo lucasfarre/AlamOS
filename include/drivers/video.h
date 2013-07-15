@@ -13,6 +13,8 @@
 
 #define DIM_ROWS 25
 #define DIM_COLUMNS 80
+#define DIM_REAL_ROWS (DIM_ROWS * 2)
+#define DIM_REAL_COLUMNS (DIM_COLUMNS * 2)
 
 #define BLANK_CHAR ' '
 
@@ -31,16 +33,13 @@ typedef struct {
 } position ;
 
 extern void set_cursor(byte row, byte column);
-//void printCharForced(position p, byte ascii);
-//void setAttibuteForced(position p, byte attribute);
-//int positionToIndex(position p);
 void setAttribute(byte attribute);
 void setChar(byte ascii);
 void getCursorPosition(int * row, int * column);
 int isValidPosition(int row, int column);
 void clearScreen(void);
-void clearScreenAdvanced(byte attribute);
-void clearScreenHeader(char * header, byte attribute);
+void clearScreenTheme(byte attribute);
+void setRowTheme(int row, byte attribute);
 void setScreenTheme(byte);
 int printChar(byte c);
 int setCursorPosition(int row, int column);
@@ -48,4 +47,8 @@ int incCursor(int);
 int decCursor(int);
 int newLine(void);
 void cursorVisibility(int boolean);
+void setFirstScrollableRow(int row);
+void scrollScreen();
+void bufferToScreen(buffer * buf);
+void screenToBuffer(buffer * buf);
 #endif

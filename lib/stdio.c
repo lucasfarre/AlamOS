@@ -132,7 +132,7 @@ void fprintf(FILE * stream, char *fmt, ...) {
 void vfprintf(FILE * stream, char *fmt, va_list ap) {
     char *p;
     int ival = 0;
-    char s[MAX_STRING_LENGTH]; /* Ultra Turbio Stack Chk FAIL ver stackchk.c*/
+    char s[MAX_STRING_LENGTH];
     for (p = fmt; *p; p++) {
         if (*p != '%') {
             fputc(*p, stream);
@@ -203,15 +203,4 @@ int puts(const char * s) {
     return fputs(s, &stdoutFile);
 }
 
-/*
- int getchar(void) {
- static char buf[10];
- static char *bufp = buf;
- static int n = 0;
- if(n == 0) {
- n = read(0, buf, sizeof buf);
- bufp = buf;
- }
- return (--n >= 0) ? (unsigned char) *bufp++ : EOF;
- }
- */
+

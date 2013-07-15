@@ -19,6 +19,9 @@ void clearInterrupts(void);
 /* Habilita las interrupciones */       
 void setInterrupts(void);	 
 
+/* Handler de la int80 */
+void _int_80_hand(void);  
+
 /* Handler de la int del Timer Tick */
 void _int_08_hand(void);  
     
@@ -29,8 +32,10 @@ void _int_1A_hand(void);
 
 /* Outport */
 void outportb(word port, byte source);
+void outportb32(word port, dword source);
 /* Inport */
-dword inportb(word port);
+byte inportb(word port);
+dword inportb32(word port);
 
 void _debug (void);
 

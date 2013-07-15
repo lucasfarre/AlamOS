@@ -1,19 +1,20 @@
 #include "./lib/stdio.h"
 #include "./drivers/video.h"
 #include "./drivers/keyboard.h"
-#include "./drivers/time.h"
+#include "./lib/time.h"
 #include "defs.h"
 #include "kasm.h"
 
 #ifndef _ints_
 #define _ints_
 
-/* Interrupción del timer tick */
+extern dword temp_asm(void);
+extern dword tj_max(void);
+
+/* Interrupcion del Timer Tick */
 void int_08(void);
 
-/* Interrupción de teclado */
+/* Interrupcion de Teclado */
 void int_09(int);
-
-void int_1A(void);
 
 #endif

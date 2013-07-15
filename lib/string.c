@@ -3,7 +3,7 @@
 void * memcpy(void * s, const void * ct, size_t n) {
     int i;
     for (i = 0; i < n; i++) {
-        *(byte *)s = *(byte *)ct;
+        *((byte *)s + i) = *((byte *)ct + i);
     }
     return s;
 }

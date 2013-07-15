@@ -37,15 +37,15 @@ char scanCodeToAsciiShiftedTable[0xFF] =
 
 int scanCodeToAscii(int scanCode) {
     specialKey(scanCode);
-    if ( shifted == 1 )
+    if(shifted == 1)
         return scanCodeToAsciiShiftedTable[scanCode];
     return scanCodeToAsciiTable[scanCode];
 }
 
 void specialKey(int scanCode) {
-    if ( scanCode == MAKE_SHIFT_L || scanCode == MAKE_SHIFT_R || scanCode == MAKE_CAPS_LOCK ) //makecodes
+    if(scanCode == MAKE_SHIFT_L || scanCode == MAKE_SHIFT_R) /* makecodes */
         shifted = 1;
-    if ( scanCode == BREAK_SHIFT_L || scanCode == BREAK_SHIFT_R || scanCode == BREAK_CAPS_LOCK ) //breakcodes
+    if(scanCode == BREAK_SHIFT_L || scanCode == BREAK_SHIFT_R) /* breakcodes */
         shifted = 0;
     return ;
 }

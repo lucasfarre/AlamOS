@@ -1,9 +1,10 @@
 #include "../../include/drivers/video.h"
 
 char * video = (char *) VIDEO_PORT;
-byte theme = DEFAULT_THEME;
 position cursor = {0,0};
 int visibleCursor = 1;
+byte theme = DEFAULT_THEME;
+int firstScrollableRow = 0;
 
 static int positionToIndex(position pos) {
     return pos.row * DIM_COLUMNS + pos.column;
@@ -45,14 +46,17 @@ int setCursorPosition(int row, int column) {
             set_cursor(cursor.row, cursor.column);
         return 1;
     }
+    cursor.row = DIM_ROWS - 1;
+    cursor.column = 0;
+    scrollScreen();
     return 0;
 }
 
 void clearScreen(void) {
-	clearScreenAdvanced(theme);
+	clearScreenTheme(theme);
 }
 
-void clearScreenAdvanced(byte attribute) {
+void clearScreenTheme(byte attribute) {
 	int i = 0;
     while(i < DIM_REAL_VECTOR) {
 		video[i++] = BLANK_CHAR;
@@ -60,18 +64,11 @@ void clearScreenAdvanced(byte attribute) {
 	}
 }
 
-void clearScreenHeader(char * header, byte attribute) {
-    int i = 0, j;
-    while(i < DIM_COLUMNS * 2) {
-		video[i++] = BLANK_CHAR;
+void setRowTheme(int row, byte attribute) {
+    int i = row;
+    while(i++ < DIM_REAL_COLUMNS) {
 		video[i++] = attribute;
 	}
-    while(i < DIM_REAL_VECTOR) {
-		video[i++] = BLANK_CHAR;
-		video[i++] = theme;
-	}
-    for(i = 0, j = 0; header[i] != 0; i++, j+=2)
-        video[j] = header[i];
 }
 
 void setScreenTheme(byte attribute) {
@@ -91,12 +88,12 @@ int printChar(byte c) {
                 setPositionChar(cursor, ' ');
                 return 1;
             }
-            return ERROR;
+            return 0;
         }
         default: {
             setPositionChar(cursor, c);
             if(!incCursor(1))
-                return ERROR;
+                return 0;
             return 1;
         }
     }
@@ -130,13 +127,33 @@ void cursorVisibility(int boolean) {
     visibleCursor = boolean;
 }
 
-//void showCursor(int) {
-//}
+void setFirstScrollableRow(int row) {
+    firstScrollableRow = row;
+}
 
-/*Falta Scrollear cuando llego al final!!!*/
+void scrollScreen(void) {
+    int i, j;
+    byte aux[DIM_VECTOR] = {0};
+    for(i = 0, j = 0; i < DIM_VECTOR; i++, j += 2)
+        aux[i] = video[j];
+    for(i = DIM_REAL_VECTOR - DIM_REAL_COLUMNS; i < DIM_REAL_VECTOR; i += 2)
+        video[i] = BLANK_CHAR;
+    for(i = firstScrollableRow * DIM_REAL_COLUMNS,
+        j = (firstScrollableRow + 1) * DIM_COLUMNS; 
+        j < DIM_VECTOR; i += 2, j++) {             
+            video[i] = aux[j];
+            aux[j] = BLANK_CHAR;    
+    }
+}
 
+void bufferToScreen(buffer * buf) {
+    int i, j;
+    for(i = 0, j = 0; i < DIM_REAL_VECTOR && j < buf->dim; i+=2, j++)
+        video[i] = buf->vec[j];
+}
 
-/*
-void scrollScreen(int rows, int direction) {
-    if(direction == UP || direction == DOWN && rows > 0 && rows <= DIM_BUFFER)
-*/
+void screenToBuffer(buffer * buf) {
+    int i, j;
+    for(i = 0, j = 0; i < DIM_REAL_VECTOR && j < buf->dim; i+=2, j++)
+        buf->vec[j] = video[i];
+}

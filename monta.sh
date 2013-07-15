@@ -14,4 +14,4 @@ echo "Kernel copiado con exito."
 echo "Desmontando la imagen del diskette"
 sudo umount /mnt
 echo "Iniciando Virtual Box..."
-VBoxManage startvm GRUB --type gui
+VBoxManage startvm AlamOS --type gui

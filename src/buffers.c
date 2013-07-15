@@ -1,14 +1,17 @@
 #include "../include/buffers.h"
 
-byte stdinBufferVector[STDIN_BUFFER_DIM] = {EOF};
-byte stdoutBufferVector[STDOUT_BUFFER_DIM] = {EOF};
-byte stderrBufferVector[STDERR_BUFFER_DIM] = {EOF};
+byte stdinBufferVector[STDIN_BUFFER_DIM] = {EOF}; /* Teclado */
+byte stdoutBufferVector[STDOUT_BUFFER_DIM] = {EOF}; /* Para testeo */
+byte stderrBufferVector[STDERR_BUFFER_DIM] = {EOF}; /* Para uso futuro */
+byte testBufferVector[TEST_BUFFER_DIM] = {EOF}; /* Para testeo */
 
 buffer stdinBuffer = {stdinBufferVector, STDIN_BUFFER_DIM, 0};
 buffer stdoutBuffer = {stdoutBufferVector, STDOUT_BUFFER_DIM, 0};
 buffer stderrBuffer = {stderrBufferVector, STDERR_BUFFER_DIM, 0};
+buffer testBuffer = {testBufferVector, TEST_BUFFER_DIM, 0};
 
-buffer * buffers[MAX_BUFFERS] = {&stdinBuffer, &stdoutBuffer, &stderrBuffer};
+buffer * buffers[MAX_BUFFERS] = {&stdinBuffer, &stdoutBuffer, 
+                                 &stderrBuffer, &testBuffer};
 
 int enqueueBuffer(byte c, buffer * buf) {
     if(buf->last < buf->dim) {
@@ -35,5 +38,12 @@ void readBuffer(void * ct, const buffer * buf, size_t n) {
 }
 
 void writeBuffer(buffer * buf, const void * ct, size_t n) { 
-    memcpy(buf->vec, ct, n);
+    if(buf->last + n < buf->dim) {
+        memcpy(buf->vec + buf->last, ct, n);
+        buf->last += n;
+    }
+    else {
+        memcpy(buf->vec, ct, n);
+        buf->last = n;
+    }
 }

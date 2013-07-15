@@ -10,12 +10,6 @@
 #define MAKE_SHIFT_R 0x36
 #define BREAK_SHIFT_L 0xAA
 #define BREAK_SHIFT_R 0xB6
-#define MAKE_CAPS_LOCK 0x3A
-#define BREAK_CAPS_LOCK 0xBA
-
-/* */
-#define SHIFT MAKE_SHIFT_L
-/* Para probar en la int */
 
 int scanCodeToAscii(int);
 void specialKey(int);
